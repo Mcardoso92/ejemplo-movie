@@ -8,6 +8,6 @@ namespace movie_mvc.Models
         [Required]
         [StringLength(50)]
         public string Descripcion { get; set; }
-        public List<Pelicula> PeliculasGenero { get; set; }
+        public List<Pelicula>? PeliculasGenero { get; set; }
     }
 }

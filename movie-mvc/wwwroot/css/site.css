@@ -29,3 +29,103 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+:root {
+  --bg-color: #ffffff;
+  --text-color: #212529;
+  --muted-color: #6c757d;
+  --link-color: #0d6efd;
+  --nav-bg: #ffffff;
+  --card-bg: #ffffff;
+}
+
+.dark-theme {
+  --bg-color: #121212;
+  --text-color: #e9ecef;
+  --muted-color: #ced4da;
+  --link-color: #4ea8ff;
+  --nav-bg: #1f1f1f;
+  --card-bg: #1b1b1b;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.navbar, .navbar-brand, .nav-link {
+  background-color: var(--nav-bg) !important;
+  color: var(--text-color) !important;
+}
+
+.table {
+  color: var(--text-color);
+}
+
+.card, .modal-content {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+}
+
+a {
+  color: var(--link-color);
+}
+
+/* DataTables and table-specific styles for dark theme */
+.dark-theme table,
+.dark-theme .table,
+.dark-theme table.dataTable {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border-color: rgba(255,255,255,0.06);
+}
+
+.dark-theme .table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(255,255,255,0.02);
+}
+
+.dark-theme table.dataTable thead th {
+  background-color: rgba(255,255,255,0.03);
+  color: var(--text-color);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.dark-theme table.dataTable tbody td {
+  background-color: transparent;
+  color: var(--text-color);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.dark-theme .dataTables_wrapper .dataTables_filter input,
+.dark-theme .dataTables_wrapper .dataTables_length select {
+  background: #222;
+  color: var(--text-color);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.dark-theme .dataTables_wrapper .dataTables_paginate .paginate_button {
+  background: transparent;
+  color: var(--text-color);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.dark-theme .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dark-theme .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background: rgba(255,255,255,0.06);
+  color: var(--text-color);
+}
+
+.dark-theme .dataTables_wrapper .dataTables_info {
+  color: var(--muted-color);
+}
+
+.dark-theme .dataTables_wrapper .dataTables_length label,
+.dark-theme .dataTables_wrapper .dataTables_filter label {
+  color: var(--text-color);
+}
+
+/* Improve contrast for table images */
+.dark-theme table img {
+  border-radius: 4px;
+  background: rgba(255,255,255,0.02);
+}

@@ -20,6 +20,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6 d-flex flex-wrap gap-2 justify-content-lg-end">
+                    @* Desplegable para filtrar por genero *@
                     <div class="dropdown">
                         <select name="generoId" asp-items="@ViewBag.GeneroId" class="form-select form-select-lg btn-outline-secondary"
                                 onchange="this.form.submit()"></select>

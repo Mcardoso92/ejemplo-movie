@@ -24,8 +24,8 @@ builder.Services.AddIdentityCore<Usuario>(options =>
     options.Password.RequireUppercase = false;
 }
 )
-    .AddEntityFrameworkStores<MovieDbContext>()
     .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<MovieDbContext>()
     .AddSignInManager();
 
 //Manejo de la cookie. Lo ponemos en default, pero hay que ponerlo.
@@ -75,6 +75,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

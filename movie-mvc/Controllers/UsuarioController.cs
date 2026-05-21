@@ -18,14 +18,28 @@ namespace movie_mvc.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Login(string user)
+        [ValidateAntiForgeryToken] // Agrega esta línea para proteger contra ataques CSRF
+        public async Task<IActionResult> Login(LoginViewModel usuario)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                var resultado = await _signInManager.PasswordSignInAsync(usuario.Email, usuario.Clave, usuario.Recordarme, lockoutOnFailure: false);
+                if (resultado.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, resultado.ToString());
+                }
+            }
+            return View(usuario);
         }
 
         public IActionResult Logout()
         {
-            return View();
+            _signInManager.SignOutAsync();
+            return RedirectToAction("Index","Home");
         }
         public IActionResult Registro()
         { 
@@ -33,7 +47,7 @@ namespace movie_mvc.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken] // Agrega esta línea para proteger contra ataques CSRF
-        public async Task<IActionResult> Registro(UsuarioViewModel usuario)
+        public async Task<IActionResult> Registro(RegistroViewModel usuario)
         {
             if (ModelState.IsValid)
             {

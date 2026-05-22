@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using movie_mvc.Models;
 
@@ -81,6 +82,48 @@ namespace movie_mvc.Controllers
         public IActionResult AccessDenied()
         {
             return View();
+        }
+        [Authorize]
+        public async Task<IActionResult> MiPerfil()
+        {
+            var usuarioActual = await _userManager.GetUserAsync(User);
+
+            var usuarioVM = new MiPerfilViewModel
+            {
+                Nombre = usuarioActual.Nombre,
+                Apellido = usuarioActual.Apellido,
+                Email = usuarioActual.Email,
+                ImagenUrlPerfil = usuarioActual.ImagenUrlPerfil
+            };
+
+            return View(usuarioVM);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MiPerfil(MiPerfilViewModel usuarioVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var usuarioActual = await _userManager.GetUserAsync(User);
+                usuarioActual.Nombre = usuarioVM.Nombre;
+                usuarioActual.Apellido = usuarioVM.Apellido;
+
+                var resultado = await _userManager.UpdateAsync(usuarioActual);
+
+                if (resultado.Succeeded) 
+                {
+                    ViewBag.Mensaje = "Perfil actualizado con exito.";
+                    return View(usuarioVM);
+                }
+                else
+                {
+                    foreach(var error in resultado.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+            }
+            return View(usuarioVM);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using movie_mvc.Models;
+using movie_mvc.Service;
 
 namespace movie_mvc.Controllers
 {
@@ -9,10 +10,12 @@ namespace movie_mvc.Controllers
     {
         private readonly UserManager<Usuario> _userManager;
         private readonly SignInManager<Usuario> _signInManager;
-        public UsuarioController(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager) 
+        private readonly ImagenStorage _imagenStorage;
+        public UsuarioController(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, ImagenStorage imagenStorage) 
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _imagenStorage = imagenStorage;
         }
         public IActionResult Login()
         {
@@ -98,6 +101,7 @@ namespace movie_mvc.Controllers
 
             return View(usuarioVM);
         }
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> MiPerfil(MiPerfilViewModel usuarioVM)
@@ -105,6 +109,24 @@ namespace movie_mvc.Controllers
             if (ModelState.IsValid)
             {
                 var usuarioActual = await _userManager.GetUserAsync(User);
+                try
+                {
+                    if (usuarioVM.ImagenPerfil is not null && usuarioVM.ImagenPerfil.Length > 0)
+                    {
+                        // opcional: borrar la anterior (si no es placeholder)
+                        if (!string.IsNullOrWhiteSpace(usuarioActual.ImagenUrlPerfil))
+                            await _imagenStorage.DeleteAsync(usuarioActual.ImagenUrlPerfil);
+
+                        var nuevaRuta = await _imagenStorage.SaveAsync(usuarioActual.Id, usuarioVM.ImagenPerfil);
+                        usuarioActual.ImagenUrlPerfil = nuevaRuta;
+                        usuarioVM.ImagenUrlPerfil = nuevaRuta;
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
                 usuarioActual.Nombre = usuarioVM.Nombre;
                 usuarioActual.Apellido = usuarioVM.Apellido;
 

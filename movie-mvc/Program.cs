@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using movie_mvc.Data;
 using movie_mvc.Models;
+using movie_mvc.Service;
 //using movie_mvc.Service;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,6 +42,12 @@ builder.Services.ConfigureApplicationCookie(o =>
     o.SlidingExpiration = true;
     o.LoginPath = "/Usuario/Login";
     o.AccessDeniedPath = "/Usuario/AccessDenied";
+});
+
+builder.Services.AddScoped<ImagenStorage>();
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 2 * 1024 * 1024; // 2 MB
 });
 
 var app = builder.Build();

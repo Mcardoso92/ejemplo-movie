@@ -91,8 +91,8 @@
                                 <button type="button" class="edit-btn" onclick="document.getElementById('ImagenPerfil').click()">
                                     <span class="material-symbols-outlined" style="font-size: 16px;">edit</span>
                                 </button>
-@*                                 <input type="file" asp-for="ImagenPerfil" accept="image/png,image/jpeg,image/webp" class="form-control" onchange="previewImage(this)" />
- *@                            </div>
+                                <input type="file" asp-for="ImagenPerfil" accept="image/png,image/jpeg,image/webp" class="form-control" onchange="previewImage(this)" />
+                            </div>
                             <h2 class="fs-2 fw-bold mb-1">@Model.Nombre @Model.Apellido</h2>
                             <p class="text-secondary">@Model.Email</p>
                         </div>
@@ -122,5 +122,18 @@
         </div>
     </div>
 </main>
+
+<script>
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('profileImage').src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
 
 

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using movie_mvc.Data;
 using movie_mvc.Models;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace movie_mvc.Controllers
 {
@@ -69,8 +70,19 @@ namespace movie_mvc.Controllers
         {
             var pelicula = await _context.Peliculas
                 .Include(p => p.Genero)
+                .Include(p => p.ListaReviews)
+                .ThenInclude(r => r.Usuario)
                 .FirstOrDefaultAsync(p => p.Id == id);
-            return View();
+            
+            //Validacion para anular el boton de reseña si el usuario ya creo una reseña
+            ViewBag.UserReview = false;
+            if (User?.Identity?.IsAuthenticated == true && pelicula.ListaReviews != null)
+            {
+                string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                ViewBag.UserReview = !(pelicula.ListaReviews.FirstOrDefault(r => r.UsuarioId == userId) == null);
+            }
+
+            return View(pelicula);
         }
 
         public IActionResult Privacy()

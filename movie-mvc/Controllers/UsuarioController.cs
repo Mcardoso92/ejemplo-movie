@@ -62,7 +62,7 @@ namespace movie_mvc.Controllers
                     Email = usuario.Email,
                     Nombre = usuario.Nombre,
                     Apellido = usuario.Apellido,
-                    ImagenUrlPerfil = "default-profile.png" // Puedes asignar una imagen predeterminada o permitir que el usuario la suba
+                    ImagenUrlPerfil = "/images/default-avatar.png" // Puedes asignar una imagen predeterminada o permitir que el usuario la suba
                 };
                 var resultado = await _userManager.CreateAsync(nuevoUsuario, usuario.Clave);
                 if (resultado.Succeeded)

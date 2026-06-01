@@ -11,11 +11,13 @@ namespace movie_mvc.Controllers
         private readonly UserManager<Usuario> _userManager;
         private readonly SignInManager<Usuario> _signInManager;
         private readonly ImagenStorage _imagenStorage;
-        public UsuarioController(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, ImagenStorage imagenStorage) 
+        private readonly IEmailService _emailService;
+        public UsuarioController(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, ImagenStorage imagenStorage, IEmailService emailService) 
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _imagenStorage = imagenStorage;
+            _emailService = emailService;
         }
         public IActionResult Login()
         {
@@ -69,6 +71,7 @@ namespace movie_mvc.Controllers
                 {
                     // Si el registro es exitoso, puedes iniciar sesión automáticamente o redirigir al usuario a la página de inicio de sesión
                     await _signInManager.SignInAsync(nuevoUsuario, isPersistent: false);
+                    await _emailService.SendAsync(nuevoUsuario.Email, "Bienvenido a WhatMovie", "<h1>Gracias por registrarte en WhatMovie!</h1><p>Esperamos que disfrutes de nuestra plataforma.</p>");
                     return RedirectToAction("Index", "Home");
                 }
                 else

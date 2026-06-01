@@ -44,11 +44,16 @@ builder.Services.ConfigureApplicationCookie(o =>
     o.AccessDeniedPath = "/Usuario/AccessDenied";
 });
 
+//Servicios de archivos
 builder.Services.AddScoped<ImagenStorage>();
 builder.Services.Configure<FormOptions>(options =>
 {
     options.MultipartBodyLengthLimit = 2 * 1024 * 1024; // 2 MB
 });
+
+//Servicios de email
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
+builder.Services.AddScoped<IEmailService, SmtpEmailService>();
 
 var app = builder.Build();
 

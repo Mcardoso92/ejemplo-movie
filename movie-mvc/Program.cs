@@ -55,6 +55,9 @@ builder.Services.Configure<FormOptions>(options =>
 builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
 builder.Services.AddScoped<IEmailService, SmtpEmailService>();
 
+//Servicios de LLM
+builder.Services.AddScoped<LlmService>();
+
 var app = builder.Build();
 
 //Invocar la ejecucion de dbseer con un using scope
